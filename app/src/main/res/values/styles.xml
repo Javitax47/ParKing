@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PlazaButton" parent="Widget.AppCompat.Button">
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">20dp</item>
+    </style>
+
+    <!-- Define colores para los estados -->
+    <color name="colorPlazaDisponible">@color/colorPrimaryDark</color>
+    <color name="colorPlazaOcupada">#E91E63</color>
+    <color name="colorPlazaReservada">#E91E63</color>
+
+</resources>

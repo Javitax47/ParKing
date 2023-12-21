@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/values/arrays.xml -->
+<resources>
+
+    <!-- Idiomas disponibles -->
+    <string-array name="languages">
+        <item>Español</item>
+        <item>Inglés</item>
+        <!-- Agrega más idiomas según sea necesario -->
+    </string-array>
+
+    <string-array name="language_values">
+        <item>es</item>
+        <item>en</item>
+        <!-- Asocia los valores con los elementos anteriores -->
+    </string-array>
+
+    <!-- Temas disponibles -->
+    <string-array name="themes">
+        <item>Claro</item>
+        <item>Oscuro</item>
+        <!-- Agrega más temas según sea necesario -->
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <!-- Asocia los valores con los elementos anteriores -->
+    </string-array>
+
+</resources>
