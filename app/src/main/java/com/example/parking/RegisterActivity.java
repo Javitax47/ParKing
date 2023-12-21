@@ -7,9 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,13 +41,25 @@ public class RegisterActivity extends AppCompatActivity {
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email, password, fullName;
+                String email, password, nombre;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
-                fullName = String.valueOf(editTextName.getText());
+                nombre = String.valueOf(editTextName.getText());
 
-                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(fullName)) {
-                    Toast.makeText(RegisterActivity.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(RegisterActivity.this, "Introducir email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(RegisterActivity.this, "Introducir contraseña", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.length() < 6) {
+                    Toast.makeText(RegisterActivity.this, "Tu contraseña debe tener 6 o más dígitos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(nombre)) {
+                    Toast.makeText(RegisterActivity.this, "Introduce tu nombre y apellidos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -53,27 +69,25 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Dividir el nombre y apellidos
-                String[] nameParts = fullName.split(" ");
-                String nombre, apellidos;
+                // Separar el nombre y apellidos
+                String[] partesNombre = nombre.split(" ");
 
-                if (nameParts.length >= 1) {
-                    nombre = nameParts[0]; // La primera palabra es el nombre
-                } else {
-                    nombre = "";
+                if (partesNombre.length == 1) {
+                    Toast.makeText(RegisterActivity.this, "Introduce tus dos apellidos", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (partesNombre.length == 2) {
+                    Toast.makeText(RegisterActivity.this, "Introduce tu segundo apellido", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
-                if (nameParts.length >= 2) {
-                    apellidos = nameParts[1] + " " + nameParts[2]; // Las dos siguientes palabras son los apellidos
-                } else {
-                    apellidos = "";
-                }
+                String primerNombre = partesNombre.length > 0 ? partesNombre[0] : "";
+                String apellidos = partesNombre.length > 2 ? partesNombre[1] + " " + partesNombre[2] : "";
 
                 // Crear un mapa con los datos para la colección "identificacion"
                 Map<String, Object> usuario = new HashMap<>();
                 usuario.put("correo", email);
                 usuario.put("contraseña", password);
-                usuario.put("nombre", nombre);
+                usuario.put("nombre", primerNombre);
                 usuario.put("apellidos", apellidos);
 
                 // Obtener una referencia a la colección "identificacion" en Firestore
@@ -81,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // Añadir un nuevo documento a la colección "identificacion"
                 db.collection("identificacion")
-                        .document().set(usuario)
+                        .add(usuario)
                         .addOnSuccessListener(documentReference -> {
                             Toast.makeText(RegisterActivity.this, "Documento creado con éxito en la colección 'identificacion'", Toast.LENGTH_SHORT).show();
                         })
@@ -90,21 +104,23 @@ public class RegisterActivity extends AppCompatActivity {
                         });
 
                 // Continuar con la creación del usuario en Firebase Authentication
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(RegisterActivity.this, task -> {
-                            if (task.isSuccessful()) {
-                                // Aquí se crea el perfil del usuario con el nombre
-                                mAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(nombre)
-                                        .build()
-                                );
-                                Toast.makeText(RegisterActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(RegisterActivity.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Aquí se crea el perfil del usuario con el nombre
+                            mAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(nombre)
+                                    .build()
+                            );
+                            Toast.makeText(RegisterActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
 
             private boolean isValidEmail(String email) {

@@ -158,5 +158,17 @@
         app:srcCompat="@android:drawable/btn_star"
         app:tint="@color/colorPrimaryDark" />
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="219dp" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="344dp"
+        tools:layout_editor_absoluteY="74dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

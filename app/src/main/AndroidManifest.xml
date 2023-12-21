@@ -60,7 +60,9 @@
             android:name=".CrearReserva"
             android:exported="true">
         </activity>
-
+        <activity
+            android:name=".Añadir_Vehiculos"
+            android:exported="true">
+        </activity>
     </application>
-
 </manifest>

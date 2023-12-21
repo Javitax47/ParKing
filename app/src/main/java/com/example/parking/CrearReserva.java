@@ -7,11 +7,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +19,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -155,7 +152,6 @@ public class CrearReserva extends AppCompatActivity {
                     estado[0] = new obtenerEstadoPlaza().execute(plazaSeleccionada).get();
                     if("disponible".equals(estado[0])){
                         crearReserva(plazaSeleccionada, title);
-                        Toast.makeText(getApplicationContext(), "La reserva se ha realizado con éxito", Toast.LENGTH_LONG).show();
                         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
                         firestore.collection("plaza")
@@ -168,54 +164,58 @@ public class CrearReserva extends AppCompatActivity {
                                             firestore.collection("plaza").document(document.getId())
                                                     .update("estado", "reservado");
                                         }
+
+                                        // Cierra la actividad actual y la reinicia
+                                        Intent intent = getIntent();
+                                        finish();
+                                        startActivity(intent);
                                     }
                                 });
-                    }
-                    try {
-                        estado[0] = new obtenerEstadoPlaza().execute("A1").get();
-                        if ("disponible".equals(estado[0])) {
-                            int color = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
-                            plaza1.setBackgroundColor(color);
-                            plaza1.setText("A1\nDISPONIBLE");
-                            plaza1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        } else {
-                            int color = ContextCompat.getColor(getApplicationContext(), R.color.colorError);
-                            plaza1.setBackgroundColor(color);
-                            plaza1.setText("A1\nOCUPADO");
-                            plaza1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        }
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    try {
-                        estado[0] = new obtenerEstadoPlaza().execute("A2").get();
-                        if ("disponible".equals(estado[0])) {
-                            int color = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
-                            plaza2.setBackgroundColor(color);
-                            plaza2.setText("A2\nDISPONIBLE");
-                            plaza2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        } else {
-                            int color = ContextCompat.getColor(getApplicationContext(), R.color.colorError);
-                            plaza2.setBackgroundColor(color);
-                            plaza2.setText("A2\nOCUPADO");
-                            plaza2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                        }
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
                     }
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
             }
         });
+
+        try {
+            estado[0] = new obtenerEstadoPlaza().execute("A1").get();
+            if ("disponible".equals(estado[0])) {
+                int color = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
+                plaza1.setBackgroundColor(color);
+                plaza1.setText("A1\nDISPONIBLE");
+                plaza1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            } else {
+                int color = ContextCompat.getColor(getApplicationContext(), R.color.colorError);
+                plaza1.setBackgroundColor(color);
+                plaza1.setText("A1\nOCUPADO");
+                plaza1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            estado[0] = new obtenerEstadoPlaza().execute("A2").get();
+            if ("disponible".equals(estado[0])) {
+                int color = ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark);
+                plaza2.setBackgroundColor(color);
+                plaza2.setText("A2\nDISPONIBLE");
+                plaza2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            } else {
+                int color = ContextCompat.getColor(getApplicationContext(), R.color.colorError);
+                plaza2.setBackgroundColor(color);
+                plaza2.setText("A2\nOCUPADO");
+                plaza2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         // Añade tantas páginas como necesites
         for (int i = 0; i < NUMERO_DE_VISTAS; i++) {
