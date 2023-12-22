@@ -8,8 +8,15 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 import java.util.List;
 
+// En la clase Tab3Adaptador, cambia el tipo de dataList a List<String>
 public class Tab3Adaptador extends RecyclerView.Adapter<Tab3Adaptador.ViewHolder> {
     private List<String> dataList; // Puedes cambiar el tipo de dato según tus necesidades
     private Context context;
@@ -27,15 +34,27 @@ public class Tab3Adaptador extends RecyclerView.Adapter<Tab3Adaptador.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // Puedes personalizar la asignación de datos según tus necesidades
-        holder.textView1.setText("Item " + position);
-        holder.textView2.setText("Subtitle " + position);
-        holder.textView3.setText("Description " + position);
+        // Obtén los detalles del vehículo desde el dataList
+        String vehiculoDetails = dataList.get(position);
+
+        // Dividir los detalles del vehículo por saltos de línea
+        String[] detailsArray = vehiculoDetails.split("\n");
+
+        // Asignar los detalles del vehículo a las vistas
+        holder.textView1.setText(detailsArray[0]);
+        holder.textView2.setText(detailsArray[1]);
+        holder.textView3.setText(detailsArray[2]);
     }
 
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+
+    // Método para actualizar los datos del adaptador
+    public void updateData(List<String> newDataList) {
+        dataList = newDataList;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

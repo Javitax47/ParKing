@@ -15,10 +15,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -89,19 +92,21 @@ public class RegisterActivity extends AppCompatActivity {
                 usuario.put("contraseña", password);
                 usuario.put("nombre", primerNombre);
                 usuario.put("apellidos", apellidos);
+                List<String> vehiculos = new ArrayList<>();
+                usuario.put("vehiculos", vehiculos);
 
-                // Obtener una referencia a la colección "identificacion" en Firestore
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                // Añadir un nuevo documento a la colección "identificacion"
                 db.collection("identificacion")
-                        .add(usuario)
-                        .addOnSuccessListener(documentReference -> {
+                        .document(email)
+                        .set(usuario)
+                        .addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegisterActivity.this, "Documento creado con éxito en la colección 'identificacion'", Toast.LENGTH_SHORT).show();
                         })
                         .addOnFailureListener(e -> {
                             Toast.makeText(RegisterActivity.this, "Error al crear el documento en la colección 'identificacion'", Toast.LENGTH_SHORT).show();
                         });
+
 
                 // Continuar con la creación del usuario en Firebase Authentication
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
