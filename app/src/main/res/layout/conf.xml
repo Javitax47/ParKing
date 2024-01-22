@@ -35,12 +35,12 @@
             android:background="#BDBDBD" />
 
         <!-- Nombre de usuario -->
-        <Button
-            android:id="@+id/usernameButton"
+        <EditText
+            android:id="@+id/editTextName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cambiar Nombre de Usuario"
+            android:layout_height="50dp"
             android:background="#00FFFFFF"
+            android:hint="Cambiar Nombre Usuario"
             android:textAlignment="textStart" />
         <!-- Divisor -->
         <View
@@ -49,13 +49,20 @@
             android:background="#BDBDBD" />
 
         <!-- Correo electrónico -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00FFFFFF"
+            android:hint="Cambiar Contraseña"
+            android:textAlignment="textStart" />
+
         <Button
-            android:id="@+id/emailButton"
+            android:id="@+id/buttonUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cambiar Correo Electrónico"
-            android:background="#00FFFFFF"
-            android:textAlignment="textStart" />
+            android:text="Actualizar"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/textView7"
@@ -66,27 +73,40 @@
             android:textColor="@color/colorPrimaryDark"
             android:layout_marginBottom="5dp"/>
 
-        <!-- Historial Reservas -->
         <Button
-            android:id="@+id/textView12"
+            android:id="@+id/alertas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Historial de Reservas"
             android:background="#00FFFFFF"
+            android:text="Alertas"
             android:textAlignment="textStart" />
-        <!-- Divisor -->
+
         <View
+            android:id="@+id/view2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#BDBDBD" />
 
-        <!-- Historial Reservas -->
         <Button
-            android:id="@+id/textView13"
+            android:id="@+id/privacidad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Historial de Aparcamientos"
             android:background="#00FFFFFF"
+            android:text="Privacidad y personalizacion"
+            android:textAlignment="textStart" />
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD" />
+
+        <Button
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:text="Version: 4.0"
             android:textAlignment="textStart" />
 
     </LinearLayout>

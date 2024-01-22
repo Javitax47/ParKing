@@ -27,7 +27,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaV
     public void onBindViewHolder(@NonNull ReservaViewHolder holder, int position) {
         Reserva reserva = reservas.get(position);
 
-        holder.hora.setText(reserva.getHoraInicio() + " - " + reserva.getHoraFinal());
+        holder.hora.setText(String.valueOf(reserva.getHoraInicio()));
         holder.textLugar.setText(reserva.getLugar());
         holder.textDireccion.setText(reserva.getDireccion());
         holder.textPrecio.setText(reserva.getPrecio());

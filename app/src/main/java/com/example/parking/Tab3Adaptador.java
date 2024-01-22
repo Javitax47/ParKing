@@ -8,12 +8,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 import java.util.List;
 
 // En la clase Tab3Adaptador, cambia el tipo de dataList a List<String>
@@ -62,8 +56,8 @@ public class Tab3Adaptador extends RecyclerView.Adapter<Tab3Adaptador.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            textView1 = itemView.findViewById(R.id.textView1);
-            textView2 = itemView.findViewById(R.id.textView2);
+            textView1 = itemView.findViewById(R.id.nombre_vehiculo);
+            textView2 = itemView.findViewById(R.id.identificador);
             textView3 = itemView.findViewById(R.id.textView3);
         }
     }

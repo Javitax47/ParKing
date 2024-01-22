@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDlAiPoJfGcGGWXGv3U5wK60vYQF2efHw8" />
+            android:value="AIzaSyDOaxOaA7uFQWUK0np6Z24qZwLian4UabQ" />
         <service android:name=".DeteccionService" />
         <activity
             android:name=".Asistente"

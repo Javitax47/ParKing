@@ -1,6 +1,14 @@
 package com.example.parking;
 
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,14 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
-import android.Manifest;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -28,13 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Código de solicitud para los permisos
     private static final int REQUEST_LOCATION_PERMISSIONS = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startService(new Intent(this, DeteccionService.class));
         // Verificar y solicitar permisos en tiempo de ejecución
         if (checkPermissions()) {
             initializeApp();
@@ -47,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(new MiPagerAdapter(this));
         TabLayout tabs = findViewById(R.id.tabs);
-
         new TabLayoutMediator(tabs, viewPager,
                 new TabLayoutMediator.TabConfigurationStrategy() {
                     // Dentro de onConfigureTab
@@ -66,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 }).attach();
         // Deshabilitar el cambio de fragmentos deslizando horizontalmente
         viewPager.setUserInputEnabled(false);
-
     }
-
-
     private boolean checkPermissions() {
         // Verificar si los permisos ya están concedidos
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -127,4 +121,16 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+    public void boton(View view){
+        Intent i = new Intent(this, ModificarUsuarios.class);
+        startActivity(i);
+    }
+   /* public void alertas(View view){
+        Intent i = new Intent(this, ModificarUsuarios.class);
+        startActivity(i);
+    }
+    public void privacidad(View view){
+        Intent i = new Intent(this, ModificarUsuarios.class);
+        startActivity(i);
+    }*/
 }

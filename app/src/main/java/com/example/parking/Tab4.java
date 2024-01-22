@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Tab4 extends Fragment {
+    private TextView saldoTextView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,12 +31,19 @@ public class Tab4 extends Fragment {
         ImageView acercade = view.findViewById(R.id.acercaDe);
         TextView preferences = view.findViewById(R.id.preferences);
 
+
+        // Obtener referencia al TextView 'saldo'
+        saldoTextView = view.findViewById(R.id.saldo);
+
         // Obtener usuario actual
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         if (usuario != null) {
             // Mostrar los detalles del usuario
             nombre.setText(usuario.getDisplayName());
             correo.setText(usuario.getEmail());
+
+            // Obtener el saldo del documento 'identificacion'
+            obtenerSaldoDesdeFirestore(usuario.getEmail());
         }
 
 
@@ -98,5 +107,25 @@ public class Tab4 extends Fragment {
         });
 
         return view;
+    }
+
+    private void obtenerSaldoDesdeFirestore(String email) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("identificacion")
+                .document(email)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Obtener el valor del campo 'saldo' y mostrarlo en el TextView
+                        Long saldo = documentSnapshot.getLong("saldo");
+                        if (saldo != null) {
+                            saldoTextView.setText(String.valueOf(saldo)+ "€");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Manejar errores
+                });
     }
 }

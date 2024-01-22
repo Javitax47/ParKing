@@ -1,27 +1,24 @@
 package com.example.parking;
 
+import java.sql.Timestamp;
+
 public class Reserva {
-    private String horaInicio;
-    private String horaFinal;
+    private Timestamp horaInicio;
     private String lugar;
     private String precio;
     private String direccion;
 
-    public Reserva(String horaInicio, String horaFinal, String lugar, String precio, String direccion) {
+    public Reserva(Timestamp horaInicio, String lugar, String precio, String direccion) {
         this.horaInicio = horaInicio;
-        this.horaFinal = horaFinal;
         this.lugar = lugar;
         this.precio = precio;
         this.direccion = direccion;
     }
 
-    public String getHoraInicio() {
+    public Timestamp getHoraInicio() {
         return horaInicio;
     }
 
-    public String getHoraFinal() {
-        return horaFinal;
-    }
 
     public String getLugar() {
         return lugar;

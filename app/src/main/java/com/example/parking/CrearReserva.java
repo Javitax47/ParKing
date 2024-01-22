@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -41,9 +42,11 @@ public class CrearReserva extends AppCompatActivity {
     private CrearReservaAdapter adapter;
     private int currentPage = 0;
     private TextView nombre;
+    private TextView saldo_disponible;
     private Button reservar;
     Button plaza1, plaza2;
     private FirebaseFirestore firestore;
+
     private String plazaSeleccionada;
 
     @Override
@@ -58,12 +61,16 @@ public class CrearReserva extends AppCompatActivity {
         String title = getIntent().getStringExtra(ParkingInfoBottomSheetFragment.ARG_TITLE);
         nombre = findViewById(R.id.textView16);
         nombre.setText(title);
+        saldo_disponible = findViewById(R.id.saldo_disponible);
 
         reservar = findViewById(R.id.button5);
         LayoutInflater inflater = getLayoutInflater();
 
         plaza1 = findViewById(R.id.plaza1);
         plaza2 = findViewById(R.id.plaza2);
+
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        obtenerSaldoDesdeFirestore(usuario.getEmail());
 
         final String[] estado = {null};
         try {
@@ -217,18 +224,17 @@ public class CrearReserva extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        // Añade tantas páginas como necesites
         for (int i = 0; i < NUMERO_DE_VISTAS; i++) {
             View page = inflater.inflate(R.layout.reserva_item, null);
 
             // Configura los elementos de la página según sea necesario
-            TextView textView1 = page.findViewById(R.id.textView1);
-            TextView textView2 = page.findViewById(R.id.textView2);
+            TextView textView1 = page.findViewById(R.id.nombre_vehiculo);
+            TextView textView2 = page.findViewById(R.id.identificador);
             ImageView imageView = page.findViewById(R.id.imageView);
 
             // Configura los valores de los elementos según la posición de la página
-            textView1.setText("Texto " + (i + 1));
-            textView2.setText("Texto " + (i + 2));
+            textView1.setText("Matrícula: " + i);
+            textView2.setText("Nombre: " + i);
 
             // Carga automáticamente la imagen correspondiente
             String imageName = "vehiculo" + (i + 1);
@@ -314,6 +320,25 @@ public class CrearReserva extends AppCompatActivity {
                 });
     }
 
+    private void obtenerSaldoDesdeFirestore(String email) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("identificacion")
+                .document(email)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Obtener el valor del campo 'saldo' y mostrarlo en el TextView
+                        Long saldo = documentSnapshot.getLong("saldo");
+                        if (saldo != null) {
+                            saldo_disponible.setText(saldo_disponible.getText() + String.valueOf(saldo)+ "€");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Manejar errores
+                });
+    }
 
     public void onButton1Click(View view) {
         // Lógica para cambiar a la siguiente vista al hacer clic en Button1

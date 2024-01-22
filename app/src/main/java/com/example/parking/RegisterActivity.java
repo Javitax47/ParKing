@@ -101,9 +101,27 @@ public class RegisterActivity extends AppCompatActivity {
                         .document(email)
                         .set(usuario)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(RegisterActivity.this, "Documento creado con éxito en la colección 'identificacion'", Toast.LENGTH_SHORT).show();
+                            // Documento creado con éxito en la colección 'identificacion'
+                            // Ahora, actualizar el campo 'saldo' con un valor de 100
+                            Map<String, Object> saldoData = new HashMap<>();
+                            saldoData.put("saldo", 100);
+
+                            db.collection("identificacion")
+                                    .document(email)
+                                    .update(saldoData)
+                                    .addOnSuccessListener(aVoid1 -> {
+                                        // Campo 'saldo' actualizado con éxito
+                                        Toast.makeText(RegisterActivity.this, "Registro y autenticación exitosos.", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Error al actualizar el campo 'saldo'
+                                        Toast.makeText(RegisterActivity.this, "Error al actualizar el campo 'saldo'.", Toast.LENGTH_SHORT).show();
+                                    });
                         })
                         .addOnFailureListener(e -> {
+                            // Error al crear el documento en la colección 'identificacion'
                             Toast.makeText(RegisterActivity.this, "Error al crear el documento en la colección 'identificacion'", Toast.LENGTH_SHORT).show();
                         });
 
